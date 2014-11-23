@@ -1,0 +1,39 @@
+Name: partnerspacemanager
+Summary: patchmanager allows you to manage Sailfish OS patches
+Version: 0.1
+Release: 1
+Group: Qt/Qt
+URL: https://github.com/sailfishos-patches/partnerspacemanager
+License: BSD
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |
+  Partner-space manager allows managing the partner-space
+    easily. This package contains the launcher, and QML plugin.
+Configure: none
+Builder: qtc5
+PkgConfigBR:
+- Qt5Core
+- Qt5DBus
+- Qt5Qml
+- Qt5Quick
+- mlite5
+- sailfishapp >= 0.0.10
+PkgBR: []
+Requires:
+- '%{name}-gui'
+Files:
+  - '%{_bindir}/%{name}-launcher'
+  - '%{_libdir}/qt5/qml/org/SfietKonstantin/partnerspacemanager'
+SubPackages:
+- Name: -n jolla-settings-partnerspacemanager
+  Summary: Jolla settings plugin for partnerspacemanager
+  Description: |
+    Partner-space manager allows managing the partner-space
+    easily. This package contains the Jolla settings plugin.
+  Group: Qt/Qt
+  Provides:
+  - '%{name}-gui'
+  Files:
+  - '%{_datadir}/jolla-settings/pages/partnerspacemanager'
+  - '%{_datadir}/jolla-settings/entries/partnerspacemanager.json'

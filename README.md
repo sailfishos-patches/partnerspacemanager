@@ -1,66 +1,44 @@
-# Patchmanager
+# Partner-space manager
 
-Patchmanager is a tool that can be used to modify the Sailfish OS user experience.
-It is based on AUSMT, a set of scripts that emables system file patching.
+Partner-space manager is a tool that can be used to modify the partner-space on Sailfish OS.
+The partner-space is the left ambience panel, and can be replaced by any application that is 
+*partner-enabled*.
+
+*Partner-enabled* applications are simple Sailfish OS applications, where a specific flag
+has been set on their main window. This flag allows the compositor to treat the partner-enabled
+application in a different way, and store it on the left ambience panel.
 
 ## For developers
 
-To write a patch, you need to provide two files. A patch file, and the JSON metadata.
-Both files should be installed inside `/usr/share/patchmanager/patches/<patch-subfolder>`.
-
-### The patch file
-
-The patch file must be a diff of all the files to be patched in the filesystem. It will
-be applied on the root of the filesystem, with the `-p1` flag. It **must** be named 
-`unified_diff.patch`.
-
-Usually, you can generate one of these patch files using the following command
-
-```bash
-diff -ur original/ patched/ > unified_diff.patch
-```
-
-where `original` and `patched` contains the original and modified files.
+To write a partner-space, you need to provide the JSON metadata.
+It should be installed inside `/usr/share/partnerspacemanager/partnerspaces/<partner-space-subfolder>`.
 
 ### The JSON metadata file
 
-The metadata file contains information about the patch. It is a simple JSON file, that **must**
-be named `patch.json`.
+The metadata file contains information about the partner-space. It is a simple JSON file, that **must**
+be named `partnerspace.json`.
 
-This file contains the title of the patch, a quick description of the patch, a category,
+This file contains the title of the partner-space, a quick description of the patch,
 and other informations. Here is a sample of a metadata file.
 
 ```json
 {
-    "name": "My super patch",
+    "name": "My super partner-spaces",
     "description": "Some description.",
-    "category": "other",
+    "qml": "/usr/share/mypartnerspace/main.qml",
     "infos": {
         "maintainer": "Foo Bar"
     }
 }
-```
 
-#### Categories
+To launch the partner-space, you need to provide the application to be launched with 
+partnerspace-manager. You can add either the `launcher` or `qml` field in the JSON metadata
+file.
 
-The category entry must be in the following list
-- browser
-- camera
-- calendar
-- clock
-- contacts
-- email
-- gallery
-- homescreen
-- media
-- messages
-- phone
-- settings
-- silica
-- others
-
-Some of these entries allow specific actions to be triggered, such as relaunching the homescreen
-or prestarted services.
+`launcher` requires the full path to the application to be launched, while `qml` requires an 
+absolute path to the root QML file, for a QML-only application. If you don't provide these 
+fields, partnerspace-manager will search for a file named `main.qml`, in the same folder as
+the JSON metadata file, and use it as the root file.
 
 #### Maintainers
 
