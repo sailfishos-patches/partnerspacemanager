@@ -31,6 +31,8 @@ and other informations. Here is a sample of a metadata file.
     }
 }
 
+```
+
 To launch the partner-space, you need to provide the application to be launched with 
 partnerspace-manager. You can add either the `launcher` or `qml` field in the JSON metadata
 file.
@@ -39,6 +41,22 @@ file.
 absolute path to the root QML file, for a QML-only application. If you don't provide these 
 fields, partnerspace-manager will search for a file named `main.qml`, in the same folder as
 the JSON metadata file, and use it as the root file.
+
+`launcher` apps are responsible for setting the `windowProperty()` as follows:
+
+    // These includes are needed.
+    #include <QtGui/QGuiApplication>
+    // Add the following to the .pro to alllow access to private headers
+    // until this API makes it into a Qt release: QT += gui-private 
+    #include <qpa/qplatformnativeinterface.h>
+    
+    // Add the create() call before accessing view->handle()
+    view->create();
+    QPlatformNativeInterface *native = QGuiApplication::platformNativeInterface();
+    native->setWindowProperty(view->handle(), QLatin1String("CATEGORY"), QString(QLatin1String("partner")));
+    
+    // Just before pre-existing view->show()
+    view->show();
 
 #### Maintainers
 
